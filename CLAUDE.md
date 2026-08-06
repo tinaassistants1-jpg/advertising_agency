@@ -22,8 +22,17 @@
 - `docs/principles.md` — принципы агентства.
 - `docs/benchmarks.md` — отраслевые бенчмарки с первоисточниками.
 - `docs/competencies.md` — карта компетенций (статусы честные: ✅/🟡/⬜).
-- `docs/clients/mig.md` — досье первого клиента МИГ.
+- `docs/clients/mig.md` — досье первого клиента МИГ (+ тест-план,
+  план масштабирования).
+- `docs/research/` — исследования агентства (психологи РФ, ЕС).
 - `docs/memory/` — логи сессий (что сделано, что решено, что дальше).
+- `research/R01–R12` + `hypotheses_100.md` + `hypotheses_falsification.md`
+  + `audit_mig_institute.md` + `brand_analysis_mig_institute.md` +
+  `mig_products_catalog.csv` — исследовательская программа по МИГ от
+  параллельной сессии (ветка claude/ad-agency-info-rr4lse, слита сюда).
+  Главный итог: топ-12 гипотез в hypotheses_falsification.md;
+  юнит-экономика в research/R04 (LTV-маржа ~4 100 €, допустимый CAC
+  650–1 350 €); действия — в action_log.md.
 - `index.html`, `css/`, `js/` — сайт агентства (статический, готов к GitHub
   Pages; форма лидов пишет в localStorage, вебхук — в js/main.js
   `LEAD_ENDPOINT`).
