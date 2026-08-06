@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Программа повышения квалификации в гештальт-терапии для практикующих психологов. Международный Институт Гештальта. Старт 2 октября.">
+<title>ППК в гештальт-терапии — Международный Институт Гештальта</title>
+<!--
+  Лендинг для теста рекламы (продукт: ППК, аудитория: практикующие психологи).
+  Все факты — с mig.institute и из каталога института (см. docs/clients/ в репо).
+  TODO до запуска (согласовать с клиентом):
+  1. Подтвердить цены и состав уровней участия (в каталоге: модуль ~250 €, «Практик» ~3 300 €).
+  2. Вставить Meta Pixel: заменить блок PIXEL ниже на реальный код с ID клиента.
+  3. Указать LEAD_ENDPOINT (вебхук приёма заявок: Google Sheets / CRM / Telegram-бот).
+  4. Подтвердить дату и формат ДОД 25 августа и ссылку на политику данных МИГ.
+-->
+<style>
+:root{--ink:#1a1a1a;--muted:#5a5f6b;--bg:#faf9f6;--card:#fff;--accent:#0f6b5c;--accent2:#0d8a75;--line:#e6e2d8}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{padding:18px 0;border-bottom:1px solid var(--line);background:var(--card)}
+.logo{font-weight:800;letter-spacing:-.3px}
+.logo span{color:var(--accent)}
+.hero{padding:56px 0 40px}
+.badge{display:inline-block;background:#e8f3f0;color:var(--accent);border-radius:999px;padding:5px 14px;font-size:.85rem;font-weight:600;margin-bottom:18px}
+h1{font-size:clamp(1.7rem,4.5vw,2.6rem);line-height:1.2;letter-spacing:-.5px;margin-bottom:14px}
+.sub{color:var(--muted);font-size:1.1rem;max-width:640px;margin-bottom:26px}
+.btn{display:inline-block;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:15px 28px;font-size:1.05rem;font-weight:700;cursor:pointer;text-decoration:none;transition:background .2s}
+.btn:hover{background:var(--accent2)}
+.facts{display:flex;flex-wrap:wrap;gap:26px;margin-top:34px}
+.facts div{min-width:150px}
+.facts strong{display:block;font-size:1.35rem;color:var(--accent)}
+.facts span{color:var(--muted);font-size:.9rem}
+section{padding:44px 0}
+h2{font-size:1.5rem;margin-bottom:18px;letter-spacing:-.3px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+.card h3{font-size:1.05rem;margin-bottom:6px}
+.card p{color:var(--muted);font-size:.93rem}
+.list{list-style:none}
+.list li{padding:9px 0 9px 28px;position:relative;color:var(--ink)}
+.list li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:700}
+.note{font-size:.85rem;color:var(--muted);margin-top:14px}
+.form-box{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;max-width:520px}
+.form-box label{display:block;font-size:.9rem;color:var(--muted);margin:12px 0 4px}
+.form-box input,.form-box select{width:100%;padding:12px;border:1px solid var(--line);border-radius:9px;font-size:1rem;background:var(--bg)}
+.form-box input:focus{outline:2px solid var(--accent)}
+.status{margin-top:12px;font-weight:600;min-height:1.3em}
+.status.ok{color:var(--accent)}
+.status.err{color:#c0392b}
+footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:.85rem}
+.alt{background:#f2efe8}
+</style>
+</head>
+<body>
+
+<header><div class="wrap"><div class="logo">МИГ · <span>Международный Институт Гештальта</span></div></div></header>
+
+<section class="hero"><div class="wrap">
+  <p class="badge">Для практикующих психологов · старт 2 октября</p>
+  <h1>Программа повышения квалификации в гештальт-терапии</h1>
+  <p class="sub">Углубите практику, получите супервизорскую поддержку и работайте по европейским стандартам — преподаватели МИГ аккредитованы EAGT и EAP.</p>
+  <a class="btn" href="#form">Прийти на день открытых дверей 25 августа — бесплатно</a>
+  <div class="facts">
+    <div><strong>2 октября</strong><span>старт программы</span></div>
+    <div><strong>4 формата</strong><span>от слушателя до профессионала</span></div>
+    <div><strong>EAGT / EAP</strong><span>аккредитации преподавателей</span></div>
+    <div><strong>Онлайн</strong><span>+ очные модули</span></div>
+  </div>
+</div></section>
+
+<section class="alt"><div class="wrap">
+  <h2>Для кого программа</h2>
+  <div class="cards">
+    <div class="card"><h3>Практикующим психологам</h3><p>Систематизировать подход, брать более сложные случаи, работать увереннее.</p></div>
+    <div class="card"><h3>Терапевтам в эмиграции</h3><p>Квалификация по европейскому стандарту гештальт-обучения, признаваемая профессиональным сообществом за пределами одной страны.</p></div>
+    <div class="card"><h3>Выпускникам базовых курсов</h3><p>Следующая ступень: от базовой подготовки к зрелой практике с супервизией.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>Что внутри</h2>
+  <ul class="list">
+    <li>Модульная программа: теория, практика, разборы сложных случаев</li>
+    <li>Супервизия — обязательная часть профессионального стандарта</li>
+    <li>Преподаватели с международными аккредитациями (EAGT, EAP), включая основателя института Евгения Колесникова</li>
+    <li>Форматы участия: Слушатель, Участник, Практик, Профессионал</li>
+    <li>Оплата помодульно (модуль — от 250 €) — без больших разовых платежей</li>
+  </ul>
+  <p class="note">Точную программу, расписание модулей и стоимость каждого формата вы узнаете на дне открытых дверей или в ответе на заявку.</p>
+</div></section>
+
+<section class="alt" id="form"><div class="wrap">
+  <h2>Запишитесь на день открытых дверей для практикующих — 25 августа</h2>
+  <p class="sub">Бесплатная встреча: программа, преподаватели, ответы на вопросы. Участие ни к чему не обязывает.</p>
+  <div class="form-box">
+    <form id="lead">
+      <label>Имя</label><input name="name" required placeholder="Ваше имя">
+      <label>Email</label><input name="email" type="email" required placeholder="you@example.com">
+      <label>Телефон или WhatsApp</label><input name="phone" placeholder="+382 ...">
+      <label>Ваш опыт</label>
+      <select name="experience">
+        <option>Практикую 1–3 года</option>
+        <option>Практикую 3+ лет</option>
+        <option>Завершаю обучение</option>
+        <option>Другое</option>
+      </select>
+      <br><br>
+      <button class="btn" type="submit" style="width:100%">Записаться бесплатно</button>
+      <p class="status" id="status"></p>
+      <p class="note">Отправляя форму, вы соглашаетесь на обработку данных для связи по вашей заявке.</p>
+    </form>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  Международный Институт Гештальта · mig.institute · admin@mig.institute<br>
+  Организация дополнительного образования. Программа не является государственной лицензируемой программой психотерапии отдельных стран ЕС; обучение соответствует стандартам EAGT.
+</div></footer>
+
+<!-- PIXEL: сюда вставить Meta Pixel клиента перед запуском -->
+
+<script>
+var LEAD_ENDPOINT=''; // TODO: вебхук приёма заявок (Google Sheets / CRM / бот)
+document.getElementById('lead').addEventListener('submit',async function(e){
+  e.preventDefault();
+  var f=e.target,s=document.getElementById('status');
+  var d=Object.fromEntries(new FormData(f).entries());
+  d.createdAt=new Date().toISOString();d.source='landing-ppk';
+  try{
+    if(LEAD_ENDPOINT){
+      var r=await fetch(LEAD_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d)});
+      if(!r.ok)throw new Error(r.status);
+    }else{
+      var a=JSON.parse(localStorage.getItem('ppk_leads')||'[]');a.push(d);
+      localStorage.setItem('ppk_leads',JSON.stringify(a));
+    }
+    f.reset();s.textContent='Спасибо! Мы пришлём детали на ваш email.';s.className='status ok';
+    if(typeof fbq==='function')fbq('track','Lead');
+  }catch(err){
+    s.textContent='Ошибка отправки. Напишите нам: admin@mig.institute';s.className='status err';
+  }
+});
+</script>
+</body>
+</html>
