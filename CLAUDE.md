@@ -30,6 +30,11 @@
   план масштабирования).
 - `docs/research/` — исследования агентства (психологи РФ, ЕС).
 - `docs/memory/` — логи сессий (что сделано, что решено, что дальше).
+- `research/R14_gestalt_landscape_29_countries.md` — гештальт-институты,
+  цены и русскоязычная аудитория в 29 странах (18.08); главное: два
+  разных ценовых месседжа (диаспора «в разы дешевле местного» vs СНГ
+  «премиум за EAGT-статус»), Лимассол — пилот, ОАЭ — пауза (Advertiser
+  Permit), тиры рекламных гео.
 - `research/R01–R12` + `hypotheses_100.md` + `hypotheses_falsification.md`
   + `audit_mig_institute.md` + `brand_analysis_mig_institute.md` +
   `mig_products_catalog.csv` — исследовательская программа по МИГ от
