@@ -1,0 +1,219 @@
+<title>Голоса «Сложного случая»</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;1,400&family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    /* committed dark identity — «Сложный случай» */
+    --ground:#1C1815;
+    --surface:#241E19;
+    --surface-2:#2B241D;
+    --line:#3B3229;
+    --text:#EDE6DB;
+    --muted:#A99A87;
+    --faint:#7C7062;
+    --accent:#C6633A;
+    --accent-soft:#D98A5F;
+    --quote-mark:#4A3E32;
+    --tape:rgba(198,99,58,.16);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--text);
+    font-family:"Inter Tight",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(120% 80% at 85% -10%, rgba(198,99,58,.10), transparent 60%),
+      radial-gradient(90% 60% at 5% 110%, rgba(198,99,58,.06), transparent 55%);
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:clamp(40px,7vw,96px) clamp(20px,5vw,56px)}
+
+  .eyebrow{
+    font-family:"IBM Plex Mono",ui-monospace,monospace;
+    font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent-soft);margin:0 0 18px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .eyebrow::before{content:"";width:34px;height:1px;background:var(--accent);opacity:.7}
+
+  h1.section-title{
+    font-family:"Spectral",Georgia,serif;
+    font-weight:500;
+    font-size:clamp(30px,5.4vw,52px);
+    line-height:1.08;letter-spacing:-.01em;
+    text-wrap:balance;margin:0 0 14px;
+  }
+  h1 .accent{color:var(--accent-soft);font-style:italic}
+  .lede{color:var(--muted);max-width:60ch;font-size:clamp(15px,1.6vw,17px);margin:0 0 clamp(34px,5vw,56px)}
+
+  /* Featured quote */
+  .featured{
+    position:relative;
+    background:linear-gradient(180deg,var(--surface-2),var(--surface));
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:clamp(28px,4.5vw,52px);
+    margin-bottom:clamp(20px,3vw,30px);
+    overflow:hidden;
+  }
+  .featured::before{
+    content:"“";
+    position:absolute;top:-.28em;left:.12em;
+    font-family:"Spectral",serif;font-size:clamp(120px,20vw,220px);
+    color:var(--quote-mark);line-height:1;pointer-events:none;
+  }
+  .featured blockquote{
+    position:relative;margin:0;
+    font-family:"Spectral",Georgia,serif;
+    font-size:clamp(21px,3.1vw,32px);
+    line-height:1.34;font-weight:400;letter-spacing:-.005em;
+    text-wrap:pretty;
+  }
+  .featured blockquote em{color:var(--accent-soft);font-style:italic}
+  .sig{
+    display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;
+    margin-top:26px;
+  }
+  .sig .name{font-weight:600;font-size:15px;letter-spacing:.01em}
+  .sig .meta{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;
+    color:var(--faint);letter-spacing:.03em;
+  }
+
+  /* Collage grid */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:clamp(16px,2.4vw,24px);
+  }
+  @media (max-width:720px){.grid{grid-template-columns:1fr}}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:clamp(22px,3vw,32px);
+    display:flex;flex-direction:column;gap:16px;
+    position:relative;
+    transition:border-color .25s ease, transform .25s ease;
+  }
+  .card:hover{border-color:#5a4a39;transform:translateY(-2px)}
+  .card .tag{
+    align-self:flex-start;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--accent-soft);
+    background:var(--tape);border:1px solid rgba(198,99,58,.25);
+    padding:4px 10px;border-radius:2px;
+  }
+  .card blockquote{
+    margin:0;
+    font-family:"Spectral",Georgia,serif;
+    font-size:clamp(16px,1.9vw,19px);line-height:1.45;font-weight:400;
+    text-wrap:pretty;color:var(--text);
+  }
+  .card .sig{margin-top:auto}
+
+  /* Online strip */
+  .duo{
+    margin-top:clamp(20px,3vw,30px);
+    background:
+      linear-gradient(180deg,rgba(198,99,58,.05),transparent),
+      var(--surface);
+    border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:4px;
+    padding:clamp(24px,3.4vw,36px);
+    display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,40px);
+  }
+  @media (max-width:720px){.duo{grid-template-columns:1fr;gap:24px}}
+  .duo .kicker{
+    grid-column:1/-1;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);margin:0 0 2px;
+  }
+  .duo blockquote{
+    margin:0;font-family:"Spectral",serif;font-size:clamp(16px,2vw,20px);
+    line-height:1.4;font-style:italic;color:var(--text);
+  }
+  .duo .sig{margin-top:14px}
+
+  .foot{
+    margin-top:clamp(30px,4vw,48px);
+    display:flex;flex-wrap:wrap;align-items:center;gap:18px 26px;
+    padding-top:26px;border-top:1px solid var(--line);
+  }
+  .cta{
+    font-family:"Inter Tight",sans-serif;font-weight:600;font-size:15px;
+    color:var(--ground);background:var(--accent);
+    padding:13px 24px;border-radius:3px;text-decoration:none;
+    display:inline-block;transition:background .2s ease;
+  }
+  .cta:hover{background:var(--accent-soft)}
+  .foot .note{color:var(--faint);font-size:13.5px;font-family:"IBM Plex Mono",monospace}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  a:focus-visible,.cta:focus-visible{outline:2px solid var(--accent-soft);outline-offset:3px}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Отзывы выпускников · ППК</p>
+  <h1 class="section-title">Что говорят те, кто уже прошёл <span class="accent">«Сложный случай»</span></h1>
+  <p class="lede">Практикующие терапевты из разных стран — о том, что программа изменила в их работе. Их словами, без правок.</p>
+
+  <figure class="featured">
+    <blockquote>
+      После курса пришло понимание, что мы, к сожалению, <em>не волшебники-терапевты</em>. Боли меньше не становится — но помимо боли душа наша расширяется, и там появляется ещё место любви, доброте, сочувствию.
+    </blockquote>
+    <figcaption class="sig">
+      <span class="name">Нелли</span>
+      <span class="meta">гештальт-терапевт · Дубай · первый поток</span>
+    </figcaption>
+  </figure>
+
+  <div class="grid">
+    <article class="card">
+      <span class="tag">Карта местности</span>
+      <blockquote>ППК — это как карта местности. Где-то ты ходишь и понимаешь, что эту местность знаешь. А где-то — что надо копать глубже. Курс хорош тем, что в нём можно понять, куда тебе хотелось бы дальше.</blockquote>
+      <div class="sig"><span class="name">Нелли</span><span class="meta">Дубай · 1 поток</span></div>
+    </article>
+
+    <article class="card">
+      <span class="tag">Опора</span>
+      <blockquote>Я пришла в очень серьёзном профессиональном кризисе — казалось, я ужасно работала. ППК попался очень вовремя. Менялись не действия, а то, что начало вставать на место в голове. Я стала чувствовать себя намного увереннее.</blockquote>
+      <div class="sig"><span class="name">Варвара</span><span class="meta">Москва · 1 поток</span></div>
+    </article>
+
+    <article class="card">
+      <span class="tag">Сертификация</span>
+      <blockquote>ППК пришёлся на год перед моей сертификацией, и я использовала супервизорские группы как подготовку. И сертификация случилась успешно — во многом благодаря именно этим многим-многим часам супервизии.</blockquote>
+      <div class="sig"><span class="name">Эльнара</span><span class="meta">Италия · аккредитация EAGT</span></div>
+    </article>
+
+    <article class="card">
+      <span class="tag">Белые пятна</span>
+      <blockquote>Глубокое погружение позволяет посмотреть в свои белые пятна — что ты не видишь и куда тебе развиваться. И посмотреть на себя как на терапевта: это очередной этап формирования собственной идентичности.</blockquote>
+      <div class="sig"><span class="name">Ольга</span><span class="meta">Швейцария · 3 поток</span></div>
+    </article>
+  </div>
+
+  <section class="duo">
+    <p class="kicker">А если страшно учиться онлайн</p>
+    <div>
+      <blockquote>«Онлайн для меня вообще не то что не пугающая вещь, а поддерживающая. Для меня география — это большое преимущество».</blockquote>
+      <div class="sig"><span class="name">Эльнара</span><span class="meta">35 лет вне родной страны</span></div>
+    </div>
+    <div>
+      <blockquote>«Были сомнения — что экран обедняет терапию. Но нет. Мы так здорово это обсудили, что все сомнения окончательно пропали».</blockquote>
+      <div class="sig"><span class="name">Ольга</span><span class="meta">Швейцария · 3 поток</span></div>
+    </div>
+  </section>
+
+  <div class="foot">
+    <a class="cta" href="#">Прийти на День открытых дверей</a>
+    <span class="note">Черновик блока · подписи и дата ДОД — подставить</span>
+  </div>
+</div>
