@@ -1,0 +1,10 @@
+services:
+  assistant:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - assistant-data:/app/data
+
+volumes:
+  assistant-data:

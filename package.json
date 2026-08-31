@@ -1,0 +1,32 @@
+{
+  "name": "maison-assistant",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Ассистент Дома Maison Tina Riich в мессенджерах: Рич (личные чаты) и Арина (комьюнити-менеджер групп)",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.122.0",
+    "@octokit/rest": "^22.0.1",
+    "better-sqlite3": "^13.0.3",
+    "croner": "^10.0.1",
+    "dotenv": "^17.4.2",
+    "grammy": "^1.46.0",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^26.4.0",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  }
+}
