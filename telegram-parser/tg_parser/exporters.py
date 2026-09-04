@@ -16,8 +16,16 @@ class ExportError(RuntimeError):
     pass
 
 
-def export(rows: Iterable[dict[str, Any]], path: str | Path, fmt: str | None = None) -> int:
-    """Пишет строки в файл, возвращает количество записей."""
+def export(
+    rows: Iterable[dict[str, Any]],
+    path: str | Path,
+    fmt: str | None = None,
+    fields: list[str] | None = None,
+) -> int:
+    """Пишет строки в файл, возвращает количество записей.
+
+    fields задаёт порядок колонок (по умолчанию — колонки аккаунта).
+    """
     out = Path(path)
     fmt = (fmt or out.suffix.lstrip(".") or "csv").lower()
     if fmt not in FORMATS:
@@ -31,38 +39,38 @@ def export(rows: Iterable[dict[str, Any]], path: str | Path, fmt: str | None = N
         "xlsx": _write_xlsx,
         "txt": _write_txt,
     }[fmt]
-    return writer(list(rows), out)
+    return writer(list(rows), out, fields or FIELDS)
 
 
-def _write_csv(rows: list[dict[str, Any]], out: Path) -> int:
+def _write_csv(rows: list[dict[str, Any]], out: Path, fields: list[str]) -> int:
     # utf-8-sig — чтобы Excel корректно открывал кириллицу.
     with out.open("w", encoding="utf-8-sig", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=FIELDS, extrasaction="ignore")
+        writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
     return len(rows)
 
 
-def _write_json(rows: list[dict[str, Any]], out: Path) -> int:
+def _write_json(rows: list[dict[str, Any]], out: Path, fields: list[str]) -> int:
     out.write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding="utf-8")
     return len(rows)
 
 
-def _write_jsonl(rows: list[dict[str, Any]], out: Path) -> int:
+def _write_jsonl(rows: list[dict[str, Any]], out: Path, fields: list[str]) -> int:
     with out.open("w", encoding="utf-8") as handle:
         for row in rows:
             handle.write(json.dumps(row, ensure_ascii=False) + "\n")
     return len(rows)
 
 
-def _write_txt(rows: list[dict[str, Any]], out: Path) -> int:
+def _write_txt(rows: list[dict[str, Any]], out: Path, fields: list[str]) -> int:
     """Только @username — удобно для импорта в другие инструменты."""
     lines = [f"@{row['username']}" for row in rows if row.get("username")]
     out.write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf-8")
     return len(lines)
 
 
-def _write_xlsx(rows: list[dict[str, Any]], out: Path) -> int:
+def _write_xlsx(rows: list[dict[str, Any]], out: Path, fields: list[str]) -> int:
     try:
         from openpyxl import Workbook
     except ImportError as exc:  # pragma: no cover - зависит от окружения
@@ -71,9 +79,9 @@ def _write_xlsx(rows: list[dict[str, Any]], out: Path) -> int:
     workbook = Workbook()
     sheet = workbook.active
     sheet.title = "accounts"
-    sheet.append(FIELDS)
+    sheet.append(fields)
     for row in rows:
-        sheet.append([_cell(row.get(name)) for name in FIELDS])
+        sheet.append([_cell(row.get(name)) for name in fields])
     sheet.freeze_panes = "A2"
     workbook.save(out)
     return len(rows)

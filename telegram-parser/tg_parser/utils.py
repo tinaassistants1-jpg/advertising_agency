@@ -96,6 +96,15 @@ async def with_flood_retry(
 
 _LINK_RE = re.compile(r"^(?:https?://)?(?:www\.)?t\.me/(.+)$", re.IGNORECASE)
 _ID_RE = re.compile(r"^-?\d+$")
+_INVITE_RE = re.compile(
+    r"^(?:https?://)?(?:www\.)?t\.me/(?:joinchat/|\+)([A-Za-z0-9_-]+)/?$", re.IGNORECASE
+)
+
+
+def invite_hash(target: str) -> str | None:
+    """Хеш приватной инвайт-ссылки (t.me/+XXXX, t.me/joinchat/XXXX) или None."""
+    match = _INVITE_RE.match(target.strip())
+    return match.group(1) if match else None
 
 
 class TargetError(ValueError):
@@ -124,9 +133,45 @@ def normalize_target(target: str) -> str | int:
 
 
 async def resolve_entity(client: Any, target: str) -> Any:
-    """Возвращает Telethon-сущность чата/канала."""
-    key = normalize_target(target)
-    return await client.get_entity(key)
+    """Возвращает Telethon-сущность чата/канала.
+
+    Приватные инвайт-ссылки разрешаются без вступления: если аккаунт уже
+    состоит в чате, Telegram отдаёт сам чат. Если нет — вступать нужно
+    вручную, автоматически мы этого не делаем.
+    """
+    invite = invite_hash(target)
+    if invite:
+        return await resolve_invite(client, invite)
+    return await client.get_entity(normalize_target(target))
+
+
+async def resolve_invite(client: Any, invite: str) -> Any:
+    """CheckChatInvite: проверка приватной ссылки без вступления в чат."""
+    from telethon.tl.functions.messages import CheckChatInviteRequest
+    from telethon.tl.types import ChatInviteAlready, ChatInvitePeek
+
+    result = await client(CheckChatInviteRequest(invite))
+    if isinstance(result, (ChatInviteAlready, ChatInvitePeek)):
+        return result.chat
+    title = getattr(result, "title", "чат")
+    count = getattr(result, "participants_count", None)
+    raise TargetError(
+        f"«{title}»"
+        + (f" ({count} участников)" if count else "")
+        + ": вы не состоите в этом чате. Вступите по ссылке вручную, "
+        "затем повторите запуск — автоматически мы не вступаем."
+    )
+
+
+def read_targets_file(path: str | Path) -> list[str]:
+    """Список целей из файла: по одной в строке, # — комментарий."""
+    lines = Path(path).read_text(encoding="utf-8").splitlines()
+    seen: dict[str, None] = {}
+    for raw in lines:
+        line = raw.split("#", 1)[0].strip()
+        if line:
+            seen.setdefault(line, None)
+    return list(seen)
 
 
 def entity_title(entity: Any) -> str:

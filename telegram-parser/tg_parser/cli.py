@@ -20,6 +20,7 @@ from tg_parser.collectors import COLLECTORS, MODES, CollectContext, CollectorErr
 from tg_parser.config import ConfigError, Settings
 from tg_parser.exporters import ExportError, export
 from tg_parser.filters import Filters
+from tg_parser.inspection import REPORT_FIELDS, inspect_all, summarize
 from tg_parser.models import UserRecord
 from tg_parser.storage import Storage
 from tg_parser.utils import (
@@ -29,6 +30,7 @@ from tg_parser.utils import (
     confirm,
     log,
     parse_since,
+    read_targets_file,
     resolve_entity,
     setup_logging,
     with_flood_retry,
@@ -67,7 +69,8 @@ def build_parser() -> argparse.ArgumentParser:
     sub.add_parser("login", help="войти в Telegram и сохранить сессию")
 
     run = sub.add_parser("parse", help="собрать аккаунты из чатов/каналов")
-    run.add_argument("targets", nargs="+", help="@username, ссылка t.me/... или числовой id")
+    run.add_argument("targets", nargs="*", help="@username, ссылка t.me/... или числовой id")
+    run.add_argument("--targets-file", help="файл со списком целей, по одной в строке")
     run.add_argument(
         "--mode",
         default="members",
@@ -91,6 +94,15 @@ def build_parser() -> argparse.ArgumentParser:
     out.add_argument("--source-mode", help="только записи одного режима сбора")
     out.add_argument("--force", action="store_true", help="перезаписать существующий файл")
     _add_filter_args(out)
+
+    scan = sub.add_parser(
+        "inspect",
+        help="разведка: что именно можно собрать из каждой цели (без сбора данных)",
+    )
+    scan.add_argument("targets", nargs="*", help="@username, ссылка t.me/... или числовой id")
+    scan.add_argument("--targets-file", help="файл со списком целей, по одной в строке")
+    scan.add_argument("--out", help="отчёт разведки в файл (csv/json/jsonl/xlsx)")
+    scan.add_argument("--format", dest="fmt", help="csv | json | jsonl | xlsx")
 
     sub.add_parser("stats", help="статистика по базе")
 
@@ -131,6 +143,17 @@ def filters_from_args(args: argparse.Namespace) -> Filters:
     )
 
 
+def collect_targets(args: argparse.Namespace) -> list[str]:
+    """Цели из аргументов и/или файла, с сохранением порядка и без дублей."""
+    targets = list(args.targets or [])
+    if getattr(args, "targets_file", None):
+        targets += read_targets_file(args.targets_file)
+    unique = list(dict.fromkeys(targets))
+    if not unique:
+        raise SystemExit("Не задано ни одной цели: укажите их аргументами или --targets-file.")
+    return unique
+
+
 def resolve_modes(raw: str) -> list[str]:
     if raw.strip().lower() == "all":
         return list(MODES)
@@ -159,6 +182,7 @@ async def cmd_login(args: argparse.Namespace, settings: Settings) -> int:
 
 
 async def cmd_parse(args: argparse.Namespace, settings: Settings) -> int:
+    targets = collect_targets(args)
     modes = resolve_modes(args.mode)
     since = parse_since(args.since)
     filters = filters_from_args(args)
@@ -172,7 +196,7 @@ async def cmd_parse(args: argparse.Namespace, settings: Settings) -> int:
         try:
             await ensure_authorized(client, settings)
 
-            for target in args.targets:
+            for target in targets:
                 try:
                     entity = await resolve_entity(client, target)
                 except (TargetError, ValueError) as exc:
@@ -230,6 +254,29 @@ async def cmd_parse(args: argparse.Namespace, settings: Settings) -> int:
 
     print(f"Готово. Новых аккаунтов в базе: {total_new}. База: {args.db}")
     return 1 if failures and not total_new else 0
+
+
+async def cmd_inspect(args: argparse.Namespace, settings: Settings) -> int:
+    """Разведка целей: тип, размер, доступность участников, чат обсуждений."""
+    targets = collect_targets(args)
+    limiter = RateLimiter(settings.request_delay)
+    client = build_client(settings)
+    try:
+        await ensure_authorized(client, settings)
+        rows = await with_flood_retry(
+            lambda: inspect_all(client, targets, limiter),
+            max_retries=settings.max_retries,
+            label="inspect",
+        )
+    finally:
+        await client.disconnect()
+
+    print("\n" + summarize(rows))
+    if args.out:
+        count = export(rows, args.out, args.fmt, fields=REPORT_FIELDS)
+        audit("inspect_report", args.out, rows=count)
+        print(f"\nОтчёт разведки: {args.out} ({count} строк)")
+    return 0
 
 
 def cmd_export(args: argparse.Namespace) -> int:
@@ -297,8 +344,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             return cmd_export(args)
 
         settings = Settings.from_env(args.env_file)
-        handler: Any = cmd_login if args.command == "login" else cmd_parse
-        return asyncio.run(handler(args, settings))
+        handlers = {"login": cmd_login, "parse": cmd_parse, "inspect": cmd_inspect}
+        return asyncio.run(handlers[args.command](args, settings))
     except (ConfigError, ExportError, TargetError) as exc:
         print(f"Ошибка: {exc}", file=sys.stderr)
         return 2
