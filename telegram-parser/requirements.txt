@@ -1,0 +1,6 @@
+# Обязательное
+telethon>=1.36,<2
+
+# Опционально
+openpyxl>=3.1     # выгрузка в .xlsx
+pysocks>=1.7      # работа через SOCKS/HTTP-прокси (TG_PROXY_URL)

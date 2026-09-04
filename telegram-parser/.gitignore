@@ -1,0 +1,16 @@
+# Секреты и сессии Telegram — НИКОГДА не коммитить:
+# .session даёт полный доступ к аккаунту.
+.env
+*.session
+*.session-journal
+
+# Данные и выгрузки с персональными данными
+data/
+exports/
+logs/
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
